@@ -1,0 +1,7 @@
+build/*
+dyhead.egg-info/*
+output/*
+*__pycache__*
+*.so
+detectron2/*
+*.out

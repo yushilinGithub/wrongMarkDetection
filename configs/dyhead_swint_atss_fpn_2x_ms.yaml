@@ -1,0 +1,47 @@
+MODEL:
+  META_ARCHITECTURE: "ATSS"
+  #WEIGHTS: "/home/yushilin/workspace/cutQuestion/DynamicHead-master/pretrained/atss_1_class.pth"
+  #WEIGHTS: "/home/public/yushilin/wrongSynbol/model/dyhead/to8/model_final.pth"
+  WEIGHTS: "/home/public/yushilin/wrongSynbol/model/dyhead/40k/model_final.pth"
+  #WEIGHTS: "/home/public/yushilin/wrongSynbol/model/dyhead/20k_1/model_final.pth"
+  #WEIGHTS: ""
+  PIXEL_MEAN: [123.675, 116.28, 103.53]
+  PIXEL_STD: [58.395, 57.12, 57.375]
+  BACKBONE:
+    NAME: "build_retinanet_swint_fpn_dyhead_backbone"
+  SWINT:
+    OUT_FEATURES: ["stage3", "stage4", "stage5"]
+    DEPTHS: [2, 2, 6, 2]
+    LAST_LEVAL_IN_FEATURE: "p5"
+    #WEIGHTS: "/home/public/yushilin/wrongSynbol/model/dyhead/pretrain/swin_tiny_patch4_window7_224_22k.pth"
+    WEIGHTS: ""
+  FPN:
+    IN_FEATURES: ["stage3", "stage4", "stage5"]
+    
+  DYHEAD:
+    NUM_CONVS: 6
+    CHANNELS: 256
+  ANCHOR_GENERATOR:
+    SIZES: !!python/object/apply:eval ["[[x*2,] for x in [32, 64, 128, 256, 512 ]]"]
+    #SIZES: !!python/object/apply:eval ["[[x*2,] for x in [16, 32, 64, 128, 256]]"]
+    ASPECT_RATIOS: [1.0,]
+    OFFSET: 0.5
+  ATSS:
+    NUM_CONVS: 0
+    NUM_CLASSES: 1
+    IN_FEATURES: ["p3", "p4", "p5", "p6", "p7"]
+DATASETS:
+  TRAIN: ("wrongSignDetectTrain",)
+  TEST: ("wrongSignDetectVal",)
+SOLVER:
+  IMS_PER_BATCH: 2
+  BASE_LR: 0.0001
+  WEIGHT_DECAY: 0.05
+  STEPS: (30000, 40000)
+  MAX_ITER: 50000
+  OPTIMIZER: "ADAMW"
+INPUT:
+  FORMAT: "RGB"
+  MIN_SIZE_TRAIN: (640, 672, 704, 736, 768, 800)
+VERSION: 2
+OUTPUT_DIR: "/home/public/yushilin/wrongSynbol/model/dyhead/40k"
