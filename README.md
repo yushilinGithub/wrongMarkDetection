@@ -1,1 +1,1 @@
-# wrongMarkDetection object detection with transformers
+# object detection with transformers
